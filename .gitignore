@@ -24,6 +24,7 @@ cctest/bin
 cctest/.classpath
 cctest/.project
 cctest/.settings
+cctest/local.properties
 ${out.packaged.file}.d
 ${out.packaged.file}
 cctest/lint.xml
