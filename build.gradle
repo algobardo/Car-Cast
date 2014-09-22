@@ -25,6 +25,7 @@ dependencies {
     compile fileTree(dir: 'cc/libs', include: '*.jar')
     compile fileTree(dir: 'cctest/libs', include: '*.jar')
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
 }
 
 android {
@@ -36,7 +37,7 @@ android {
         targetSdkVersion 19
         applicationId 'com.jadn.cc'
         testApplicationId "com.jadn.cc.test"
-        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+        testInstrumentationRunner 'com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner'
     }
 
     packagingOptions {
