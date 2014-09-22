@@ -27,41 +27,6 @@ dependencies {
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }
 
-ext {
-    projectVersion = "1.0"
-}
-
-def getBuildNumberParameter = { ->
-    def code = project.hasProperty('versionCode') ? versionCode.toInteger() : -1
-    return code
-}
-
-def generateVersionName(version, buildNumber) {
-    def versionName
-    if (buildNumber == -1) {
-        versionName = getGitDescribe() + " " + getCurrentGitBranch()
-    } else {
-        versionName = version + "." + buildNumber
-    }
-    return versionName
-}
-
-def getGitDescribe() {
-    try {
-        return 'git describe --tags'.execute().text.trim()
-    } catch (IOException exception) {
-        throw new UnsupportedOperationException("Could not find git! Maybe it is not in \$PATH variable?", exception)
-    }
-}
-
-def getCurrentGitBranch() {
-    try {
-        return 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
-    } catch (IOException exception) {
-        throw new UnsupportedOperationException("Could not find git! Maybe it is not in \$PATH variable?", exception)
-    }
-}
-
 android {
     compileSdkVersion 19
     buildToolsVersion '19.1.0'
@@ -72,12 +37,6 @@ android {
         applicationId 'com.jadn.cc'
         testApplicationId "com.jadn.cc.test"
         testInstrumentationRunner 'android.test.InstrumentationTestRunner'
-        versionCode getBuildNumberParameter()
-        println "VersionCode is " + versionCode
-        versionName generateVersionName(projectVersion, versionCode)
-        println "VersionName is " + versionName
-        buildConfigField "String", "GIT_DESCRIBE", "\"${getGitDescribe()}\""
-        buildConfigField "String", "GIT_CURRENT_BRANCH", "\"${getCurrentGitBranch()}\""
     }
 
     packagingOptions {

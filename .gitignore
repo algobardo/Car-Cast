@@ -28,3 +28,4 @@ cctest/local.properties
 ${out.packaged.file}.d
 ${out.packaged.file}
 cctest/lint.xml
+.DS_Store
