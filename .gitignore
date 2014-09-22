@@ -29,3 +29,4 @@ ${out.packaged.file}.d
 ${out.packaged.file}
 cctest/lint.xml
 .DS_Store
+build/
