@@ -1,0 +1,136 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.10.+'
+        classpath 'com.crashlytics.examples.gradle:preprocessor:1.0.0'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'android-sdk-manager'
+apply plugin: 'com.android.application'
+apply plugin: 'preprocessor'
+
+dependencies {
+    compile fileTree(dir: 'cc/libs', include: '*.jar')
+    compile fileTree(dir: 'cctest/libs', include: '*.jar')
+    androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
+}
+
+ext {
+    projectVersion = "1.0"
+}
+
+def getBuildNumberParameter = { ->
+    def code = project.hasProperty('versionCode') ? versionCode.toInteger() : -1
+    return code
+}
+
+def generateVersionName(version, buildNumber) {
+    def versionName
+    if (buildNumber == -1) {
+        versionName = getGitDescribe() + " " + getCurrentGitBranch()
+    } else {
+        versionName = version + "." + buildNumber
+    }
+    return versionName
+}
+
+def getGitDescribe() {
+    try {
+        return 'git describe --tags'.execute().text.trim()
+    } catch (IOException exception) {
+        throw new UnsupportedOperationException("Could not find git! Maybe it is not in \$PATH variable?", exception)
+    }
+}
+
+def getCurrentGitBranch() {
+    try {
+        return 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+    } catch (IOException exception) {
+        throw new UnsupportedOperationException("Could not find git! Maybe it is not in \$PATH variable?", exception)
+    }
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '19.1.0'
+
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 19
+        applicationId 'com.jadn.cc'
+        testApplicationId "com.jadn.cc.test"
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+        versionCode getBuildNumberParameter()
+        println "VersionCode is " + versionCode
+        versionName generateVersionName(projectVersion, versionCode)
+        println "VersionName is " + versionName
+        buildConfigField "String", "GIT_DESCRIBE", "\"${getGitDescribe()}\""
+        buildConfigField "String", "GIT_CURRENT_BRANCH", "\"${getCurrentGitBranch()}\""
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+
+    buildTypes {
+
+        // Enable code coverage
+
+        debug {
+            testCoverageEnabled = true
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'cc/AndroidManifest.xml'
+            java.srcDirs = ['cc/src']
+            resources.srcDirs = ['cc/src']
+            aidl.srcDirs = ['cc/src']
+            renderscript.srcDirs = ['cc/src']
+            res.srcDirs = ['cc/res']
+            assets.srcDirs = ['cc/assets']
+        }
+
+        androidTest {
+            java.srcDirs = ['cctest/src']
+            resources.srcDirs = ['cctest/src']
+            aidl.srcDirs = ['cctest/src']
+            renderscript.srcDirs = ['cctest/src']
+            res.srcDirs = ['cctest/res']
+            assets.srcDirs = ['cctest/assets']
+        }
+    }
+}
+
+/*********************/
+/*** CODE COVERAGE ***/
+/*********************/
+
+allprojects {
+    
+    // Avoid VerifyError
+    
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.5
+        targetCompatibility = 1.5
+    }
+}
+
+task jacoco(dependsOn: "createDebugCoverageReport") {
+    group = "Reporting"
+
+    description = "Generate Jacoco coverage reports"
+}
