@@ -1,27 +1,29 @@
 package com.jadn.cc.test;
 
+import android.test.Solo; // CQA, instead of robotium
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
 import com.jadn.cc.ui.CarCast;
-import com.robotium.solo.Solo;
 
-public class DeleteListenedToTest extends
-		ActivityInstrumentationTestCase2<CarCast> {
-
+public class DeleteListenedToTest extends ActivityInstrumentationTestCase2<CarCast> {
 	private Solo solo;
 
 	public DeleteListenedToTest() {
-		super("com.jadn.cc", CarCast.class);
+		super(CarCast.class);
 	}
 
+	@Override
 	public void setUp() throws Exception {
+		super.setUp(); // CQA
 		solo = new Solo(getInstrumentation(), getActivity());
+		UtilTest.closeSplash(solo); // CQA
 	}
 
     @Override
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
+        super.tearDown(); // CQA
     }
 
 
