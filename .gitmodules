@@ -1,0 +1,3 @@
+[submodule "cctest/src/android"]
+	path = cctest/src/android
+	url = https://github.com/algobardo/android.testR2E.git
