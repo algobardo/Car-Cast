@@ -86,6 +86,7 @@ public class PodcastTest extends ActivityInstrumentationTestCase2<CarCast> {
     }
 
     // Windows encoding
+    @android.test.UnstableTest
     public void testSubscriptionEncodedWindows() throws Exception {
         solo.sendKey(Solo.MENU);
         solo.clickOnText("Subscriptions");
@@ -177,7 +178,6 @@ public class PodcastTest extends ActivityInstrumentationTestCase2<CarCast> {
 
     // http://rss.sciam.com/sciam/60secsciencepodcast
     public void testStockPodcasts() throws Exception {
-
         solo.sendKey(Solo.MENU);
         solo.clickOnText("Subscriptions");
         solo.sendKey(Solo.MENU);

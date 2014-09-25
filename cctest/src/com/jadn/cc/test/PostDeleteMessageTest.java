@@ -17,17 +17,17 @@ public class PostDeleteMessageTest extends ActivityInstrumentationTestCase2<CarC
 	public void setUp() throws Exception {
 		super.setUp(); // CQA
 		solo = new Solo(getInstrumentation(), getActivity());
-        UtilTest.closeSplash(solo); // CQA
+		UtilTest.closeSplash(solo); // CQA
 	}
 
-    @Override
-    public void tearDown() throws Exception {
-        solo.finishOpenedActivities();
-        super.tearDown(); // CQA
-    }
+	@Override
+	public void tearDown() throws Exception {
+		solo.finishOpenedActivities();
+		super.tearDown(); // CQA
+	}
 
 
-    /**
+	/**
 	 * If you download podcasts, then delete them all, the player screen incorrectly
 	 * had the last download results on it. This test verifies that it now
 	 * correctly says "No Podcasts"
@@ -43,11 +43,10 @@ public class PostDeleteMessageTest extends ActivityInstrumentationTestCase2<CarC
 		// add in fakefeed cast
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Add");
-		solo.enterText(0, "jadn.com/cctest/testsub.xml");
+		solo.enterText(0, "cs.au.dk/~cqa/Android/Car-Cast/podcast.xml"); // CQA: jadn.com/cctest/testsub.xml didn't exist
 		solo.clickOnButton("Test");
 		solo.waitForDialogToClose(20000);
-		assertEquals("NPR: Wait Wait... Don't Tell Me! Podcast", solo
-				.getEditText(1).getText().toString());
+		assertEquals("Channel title 1", solo.getEditText(1).getText().toString()); // CQA: Was "NPR: Wait Wait... Don't Tell Me! Podcast" with testsub.xml
 		solo.clickOnButton("Save");
 
 		solo.goBack();
@@ -66,6 +65,14 @@ public class PostDeleteMessageTest extends ActivityInstrumentationTestCase2<CarC
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Download Podcasts");
 		solo.clickOnText("Start Downloads");
+
+		// CQA START: Close "WIFI is not connected" dialog
+		if (solo.waitForText("WIFI is not connected")) {
+			solo.clickOnText("Sure, go ahead");
+		}
+		// CQA END
+
+		solo.sleep(10 * 1000); // CQA: The 10 * 1000 cannot be ignored in the following waitForText statement
 		solo.waitForText(" COMPLETED ", 1, 10 * 1000);
 
 		solo.goBack();

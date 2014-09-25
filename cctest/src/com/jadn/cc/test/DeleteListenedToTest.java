@@ -27,6 +27,12 @@ public class DeleteListenedToTest extends ActivityInstrumentationTestCase2<CarCa
     }
 
 
+    /**
+     * CQA: The statement solo.waitForText(" COMPLETED ", 1, 10 * 1000)
+     * fails if no WIFI is enabled, because a dialog is opened when clicking
+     * "Start Downloads", and no download is started until confirmation has
+     * been given.
+     */
     public void testDeleteListenedTo() throws Exception {
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Settings");
@@ -47,7 +53,7 @@ public class DeleteListenedToTest extends ActivityInstrumentationTestCase2<CarCa
 		// add in fakefeed cast
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Add");
-		solo.enterText(0, "jadn.com/cctest/testsub.xml");
+		solo.enterText(0, "cs.au.dk/~cqa/Android/Car-Cast/podcast.xml"); // CQA: jadn.com/cctest/testsub.xml didn't exist
 		solo.enterText(1, "testing feed");
 		solo.clickOnButton("Save");
 
@@ -67,6 +73,14 @@ public class DeleteListenedToTest extends ActivityInstrumentationTestCase2<CarCa
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Download Podcasts");
 		solo.clickOnText("Start Downloads");
+
+		// CQA START: Close "WIFI is not connected" dialog
+		if (solo.waitForText("WIFI is not connected")) {
+			solo.clickOnText("Sure, go ahead");
+		}
+		// CQA END
+
+		solo.sleep(10 * 1000); // CQA: The 10 * 1000 cannot be ignored in the following waitForText statement
 		solo.waitForText(" COMPLETED ", 1, 10 * 1000);
 
 		solo.goBack();
@@ -81,8 +95,5 @@ public class DeleteListenedToTest extends ActivityInstrumentationTestCase2<CarCa
 		solo.clickOnText("Delete Listened To");
 		solo.goBack();
 		assertTrue(solo.searchText("1/1"));
-
 	}
-
-
 }

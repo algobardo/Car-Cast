@@ -27,8 +27,7 @@ public class WSJListenedToTest extends ActivityInstrumentationTestCase2<CarCast>
         super.tearDown(); // CQA
     }
 
-    public void testWSJ() throws Exception {
-						
+    public void testWSJ() throws Exception {						
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Settings");
 		solo.clickOnText("Max downloads");
@@ -65,6 +64,14 @@ public class WSJListenedToTest extends ActivityInstrumentationTestCase2<CarCast>
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Download Podcasts");
 		solo.clickOnText("Start Downloads");
+
+		// CQA START: Close "WIFI is not connected" dialog
+		if (solo.waitForText("WIFI is not connected")) {
+			solo.clickOnText("Sure, go ahead");
+		}
+		// CQA END
+
+		solo.sleep(10 * 1000); // CQA: The 10 * 1000 cannot be ignored in the following waitForText statement
 		solo.waitForText(" COMPLETED ", 1, 10 * 1000);
 
 		solo.goBack();
@@ -73,10 +80,17 @@ public class WSJListenedToTest extends ActivityInstrumentationTestCase2<CarCast>
 		solo.sendKey(Solo.MENU);
 		solo.clickOnText("Download Podcasts");
 		solo.clickOnText("Start Downloads");
+
+		// CQA START: Close "WIFI is not connected" dialog
+		if (solo.waitForText("WIFI is not connected")) {
+			solo.clickOnText("Sure, go ahead");
+		}
+		// CQA END
+
+		solo.sleep(10 * 1000); // CQA: The 10 * 1000 cannot be ignored in the following waitForText statement
 		solo.waitForText(" COMPLETED ", 1, 10 * 1000);
 				
 		solo.goBack();
 		assertTrue(solo.searchText("1/2"));
-
 	}
 }
