@@ -30,3 +30,4 @@ ${out.packaged.file}
 cctest/lint.xml
 .DS_Store
 build/
+local.properties
