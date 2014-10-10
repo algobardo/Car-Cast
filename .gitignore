@@ -31,3 +31,4 @@ cctest/lint.xml
 .DS_Store
 build/
 local.properties
+app-data-dynamic.json
