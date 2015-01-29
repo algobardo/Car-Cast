@@ -1,6 +1,6 @@
 package com.jadn.cc.test;
 
-import android.test.Solo; // CQA, instead of robotium
+import dk.au.cs.thor.robotium2espresso.Solo;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.jadn.cc.ui.CarCast;

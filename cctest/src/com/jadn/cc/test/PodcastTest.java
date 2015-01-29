@@ -1,6 +1,6 @@
 package com.jadn.cc.test;
 
-import android.test.Solo; // CQA, instead of robotium
+import dk.au.cs.thor.robotium2espresso.Solo;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.ListView;
@@ -86,7 +86,7 @@ public class PodcastTest extends ActivityInstrumentationTestCase2<CarCast> {
     }
 
     // Windows encoding
-    @android.test.UnstableTest
+    @dk.au.cs.thor.robotium2espresso.UnstableTest
     public void testSubscriptionEncodedWindows() throws Exception {
         solo.sendKey(Solo.MENU);
         solo.clickOnText("Subscriptions");
