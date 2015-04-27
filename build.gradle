@@ -4,19 +4,17 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
-        classpath 'dk.au.cs.thor.gradle:instrumentation:1.0.0'
+        classpath "com.android.tools.build:gradle:1.1.1"
     }
 }
 
 allprojects {
     task wrapper(type: Wrapper) {
-        gradleVersion = "1.12"
+        gradleVersion = "2.2.1"
     }
 }
 
-apply plugin: 'android'
-apply plugin: 'instrumentation'
+apply plugin: "com.android.application"
 
 allprojects {
     repositories {
@@ -26,73 +24,44 @@ allprojects {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
-        minSdkVersion 10
-        targetSdkVersion 19
+        minSdkVersion 15
+        targetSdkVersion 22
         applicationId "com.jadn.cc"
         testApplicationId "com.jadn.cc.test"
-        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
     packagingOptions {
-        exclude 'LICENSE.txt'
-    }
-
-    buildTypes {
-
-        // Enable code coverage
-
-        debug {
-            testCoverageEnabled = true
-        }
+        exclude "LICENSE.txt"
     }
 
     sourceSets {
         main {
-            manifest.srcFile 'cc/AndroidManifest.xml'
-            java.srcDirs = ['cc/src']
-            resources.srcDirs = ['cc/src']
-            aidl.srcDirs = ['cc/src']
-            renderscript.srcDirs = ['cc/src']
-            res.srcDirs = ['cc/res']
-            assets.srcDirs = ['cc/assets']
+            manifest.srcFile "cc/AndroidManifest.xml"
+            java.srcDirs = ["cc/src"]
+            resources.srcDirs = ["cc/src"]
+            aidl.srcDirs = ["cc/src"]
+            renderscript.srcDirs = ["cc/src"]
+            res.srcDirs = ["cc/res"]
+            assets.srcDirs = ["cc/assets"]
         }
 
         androidTest {
-            java.srcDirs = ['cctest/src']
-            resources.srcDirs = ['cctest/src']
-            aidl.srcDirs = ['cctest/src']
-            renderscript.srcDirs = ['cctest/src']
-            res.srcDirs = ['cctest/res']
-            assets.srcDirs = ['cctest/assets']
+            java.srcDirs = ["cctest/src"]
+            resources.srcDirs = ["cctest/src"]
+            aidl.srcDirs = ["cctest/src"]
+            renderscript.srcDirs = ["cctest/src"]
+            res.srcDirs = ["cctest/res"]
+            assets.srcDirs = ["cctest/assets"]
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'cc/libs', include: '*.jar')
-    androidTestCompile 'dk.au.cs.thor.robotium2espresso:robotium2espresso:1.0.0'
-}
-
-/*********************/
-/*** CODE COVERAGE ***/
-/*********************/
-
-allprojects {
-    
-    // Avoid VerifyError
-    
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = 1.5
-        targetCompatibility = 1.5
-    }
-}
-
-task jacoco(dependsOn: "createDebugCoverageReport") {
-    group = "Reporting"
-
-    description = "Generate Jacoco coverage reports"
+    compile fileTree(dir: "cc/libs", include: "*.jar")
+    androidTestCompile "com.jayway.android.robotium:robotium-solo:5.3.1"
 }

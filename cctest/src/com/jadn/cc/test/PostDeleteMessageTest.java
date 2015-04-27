@@ -1,6 +1,6 @@
 package com.jadn.cc.test;
 
-import dk.au.cs.thor.robotium2espresso.Solo;
+import com.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 

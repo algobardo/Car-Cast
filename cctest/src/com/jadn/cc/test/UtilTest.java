@@ -2,7 +2,7 @@ package com.jadn.cc.test;
 
 import junit.framework.TestCase;
 
-import dk.au.cs.thor.robotium2espresso.Solo;
+import com.robotium.solo.Solo;
 
 import com.jadn.cc.core.Util;
 import com.jadn.cc.R; // CQA
